@@ -6,21 +6,18 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-  workflow_dispatch:
-
+ 
 jobs:
+  
   build:
-    runs-on: ubuntu-latest
-
+   
+    runs-on: ubuntu-latest 
     steps:
       - uses: actions/checkout@v4
-
       - name: Build image
-        run: docker build -t madamidt0689/portfolio .
-
-      - name: Push image
+        run: docker build -t ${{secrets.REGISTRY_USER}}/portfolio .
+      - name: Push image 
         run: |
-            docker login -u madamidt0689 -p ${{secrets.REGISTRY_PASS}}
-            docker push madamidt0689/portfolio
-          
+            docker login -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASS}}
+            docker push ${{secrets.REGISTRY_USER}}/portfolio
+             
