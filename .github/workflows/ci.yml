@@ -18,6 +18,6 @@ jobs:
         run: docker build -t madamidt0689/portfolio .
       - name: Push image 
         run: |
-            docker login -u madamidt0689 -p ${{secrets.REGISTRY_PASS}}
+            docker login -u madamidt0689 -p Baba2017$$
             docker push madamidt0689/portfolio
              
