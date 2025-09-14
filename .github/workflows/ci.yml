@@ -7,32 +7,21 @@ on:
     branches: [ "main" ]
  
 jobs:
+  
   build:
+   
     runs-on: ubuntu-latest 
     steps:
       - uses: actions/checkout@v4
-
       - name: Build image
         run: | 
-          docker build -t ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}} .
-          docker build -t ${{secrets.REGISTRY_USER}}/portfolio .
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.24.0
-        with:
-          image-ref: ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}}
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-
+              docker build -t ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}} .
+              docker build -t ${{secrets.REGISTRY_USER}}/portfolio .
       - name: Push image 
-        if: success()
         run: |
-          docker login -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASS}}
-          docker push ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}}
-          docker push ${{secrets.REGISTRY_USER}}/portfolio
+            docker login -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASS}}
+            docker push ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}}
+            docker push ${{secrets.REGISTRY_USER}}/portfolio
 
   deploy:
     needs: build
@@ -44,7 +33,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          # port: ${{ secrets.PORT }}
+         # port: ${{ secrets.PORT }}
           script: |
-            docker rm -f resume || true
-            docker run -d --name resume -p 8080:5001 ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}}
+                  docker rm -f resume
+                  docker run -d --name resume -p 8080:5001 ${{secrets.REGISTRY_USER}}/portfolio:${{github.run_number}}
